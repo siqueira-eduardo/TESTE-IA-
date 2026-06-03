@@ -1,0 +1,6 @@
+{
+  "name": "Agenda App",
+  "description": "Um aplicativo de agenda moderno e minimalista com visualização mensal, semanal e diária.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
