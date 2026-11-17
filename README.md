@@ -1,20 +1,65 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Agenda App — Calendário e Eventos
 
-# Run and deploy your AI Studio app
+Aplicação web de calendário para cadastrar, consultar, editar e excluir eventos, com visualizações mensal, semanal e diária.
 
-This contains everything you need to run your app locally.
+## Funcionalidades identificadas no código
 
-View your app in AI Studio: https://ai.studio/apps/5aaf4e64-f5b9-4f60-a8ef-94768132fbfc
+- Visualização mensal, semanal e diária.
+- Navegação entre períodos e retorno à data atual.
+- Cadastro, edição e exclusão de eventos.
+- Busca por título e descrição.
+- Painel de análise dos eventos.
+- Interface para sincronização com Google Sheets.
+- Persistência local dos eventos no navegador por meio de `localStorage`.
+- Verificação periódica de eventos próximos e tentativa de notificação do navegador.
 
-## Run Locally
+## Tecnologias identificadas
 
-**Prerequisites:**  Node.js
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- date-fns
+- lucide-react
+- Recharts
+- Google Gemini SDK listado nas dependências
+- Firebase listado nas dependências
 
+> A presença de uma dependência no projeto não significa, por si só, que ela esteja integrada a todas as funcionalidades. A sincronização com Google Sheets depende da configuração e autorização da conta Google.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Executar localmente
+
+Requisitos: Node.js e npm.
+
+```bash
+npm install
+npm run dev
+```
+
+O Vite inicia o ambiente de desenvolvimento na porta 3000, conforme configuração do projeto.
+
+Para verificar os tipos TypeScript:
+
+```bash
+npm run lint
+```
+
+Para gerar a versão de produção:
+
+```bash
+npm run build
+```
+
+## Armazenamento e privacidade
+
+- Os eventos são armazenados no `localStorage` do navegador.
+- Os dados ficam vinculados ao navegador e dispositivo utilizados; não há evidência, no hook de eventos revisado, de sincronização automática desses registros com um banco remoto.
+- Limpar os dados do navegador pode remover os eventos armazenados localmente.
+- Evite inserir informações pessoais sensíveis em ambientes compartilhados.
+
+## Estado do projeto
+
+Projeto experimental. A documentação foi elaborada a partir da estrutura de código disponível no repositório. Antes de considerar a aplicação pronta para produção, é necessário testar os fluxos de eventos, notificações, análise e integração com Google Sheets.
+
+---
+Projeto de estudo em React e TypeScript.
