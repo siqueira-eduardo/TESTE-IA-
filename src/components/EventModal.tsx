@@ -31,8 +31,10 @@ export function EventModal({ isOpen, onClose, onSave, onDelete, eventToEdit, sel
   const [endTime, setEndTime] = useState('');
   const [color, setColor] = useState(COLORS[0]);
   const [category, setCategory] = useState<EventCategory>(CATEGORIES[0]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    setError('');
     if (eventToEdit) {
       setTitle(eventToEdit.title);
       setDescription(eventToEdit.description);
@@ -65,7 +67,12 @@ export function EventModal({ isOpen, onClose, onSave, onDelete, eventToEdit, sel
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !date || !startTime || !endTime) return;
+    if (!title.trim() || !date || !startTime || !endTime) return;
+
+    if (endTime <= startTime) {
+      setError('O horário de término deve ser depois do início.');
+      return;
+    }
 
     if (eventToEdit) {
       onSave({ id: eventToEdit.id, title, description, date, startTime, endTime, color, category });
@@ -101,6 +108,11 @@ export function EventModal({ isOpen, onClose, onSave, onDelete, eventToEdit, sel
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          {error && (
+            <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+              {error}
+            </p>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Título</label>
             <input

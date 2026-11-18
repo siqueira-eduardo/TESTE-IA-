@@ -11,7 +11,8 @@ Aplicação web de calendário para cadastrar, consultar, editar e excluir event
 - Painel de análise dos eventos.
 - Interface para sincronização com Google Sheets.
 - Persistência local dos eventos no navegador por meio de `localStorage`.
-- Verificação periódica de eventos próximos e tentativa de notificação do navegador.
+- Lembrete por notificação do navegador quando faltam 15 minutos ou menos para um evento (o navegador pede permissão ao salvar o primeiro evento).
+- Validação do horário: o término precisa ser depois do início.
 
 ## Tecnologias identificadas
 
@@ -49,6 +50,10 @@ Para gerar a versão de produção:
 ```bash
 npm run build
 ```
+
+## Sincronização com Google Sheets
+
+A exportação precisa de login Google via Firebase. Crie o arquivo `firebase-applet-config.json` na raiz do projeto com a configuração do seu projeto Firebase (o arquivo não é versionado com chaves reais). Sem ele, o botão de login mostra um aviso de que o Firebase não está configurado. Cada exportação cria uma nova planilha, com a aba "Eventos".
 
 ## Armazenamento e privacidade
 

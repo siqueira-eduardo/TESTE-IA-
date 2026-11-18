@@ -2,16 +2,16 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { dummyFirebaseConfig } from './dummyConfig';
 
-let config = dummyFirebaseConfig;
-try {
-  // If the real config is generated later, it'll be picked up
-  const realConfig = require('../../firebase-applet-config.json');
-  if (realConfig) {
-    config = realConfig;
-  }
-} catch (e) {
-  // Use dummy config
-}
+// Carrega a configuração real do Firebase se o arquivo existir na raiz do projeto.
+// (O antigo `require` não existe em módulos ESM do Vite e sempre caía no catch.)
+const realConfigs = import.meta.glob('../../firebase-applet-config.json', {
+  eager: true,
+  import: 'default',
+}) as Record<string, { apiKey?: string } | undefined>;
+const realConfig = Object.values(realConfigs)[0];
+
+export const isFirebaseConfigured = !!realConfig?.apiKey;
+const config = isFirebaseConfigured ? (realConfig as typeof dummyFirebaseConfig) : dummyFirebaseConfig;
 
 const app = initializeApp(config);
 export const auth = getAuth(app);
@@ -26,6 +26,10 @@ export const initAuth = (
   onAuthSuccess?: (user: User, token: string) => void,
   onAuthFailure?: () => void
 ) => {
+  if (!isFirebaseConfigured) {
+    onAuthFailure?.();
+    return () => {};
+  }
   return onAuthStateChanged(auth, async (user: User | null) => {
     if (user) {
       if (cachedAccessToken) {
@@ -44,6 +48,9 @@ export const initAuth = (
 };
 
 export const googleSignIn = async (): Promise<{ user: User; accessToken: string } | null> => {
+  if (!isFirebaseConfigured) {
+    throw new Error('Firebase não configurado: adicione firebase-applet-config.json na raiz do projeto.');
+  }
   try {
     isSigningIn = true;
     const result = await signInWithPopup(auth, provider);
